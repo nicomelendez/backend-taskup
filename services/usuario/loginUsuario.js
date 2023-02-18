@@ -47,7 +47,7 @@ const loginUsuario = async (email, password) => {
         return {
             respuesta: respuestaBien,
             usuario: existeUsuario.datosNoSensibles(),
-            token: generarToken(existeUsuario.nombre, existeUsuario.email)
+            token: generarToken(existeUsuario.nombre, existeUsuario.email, existeUsuario._id)
         }
         
 

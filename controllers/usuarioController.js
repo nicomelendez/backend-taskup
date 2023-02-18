@@ -141,6 +141,20 @@ const nuevoPassword = async (req, res) => {
     }
 }
 
+const perfilUsuario = async (req, res) => {
+
+    try {
+        const { usuario } = req;
+        if(!usuario){
+            res.status(500).json(respuestaFaltanDatos)
+        }
+
+        return res.status(200).json(usuario)
+    } catch (error) {
+        return res.status(500).json(respuestaCathError)
+    }
+}
+
 const postUsuario = async (req, res) => {
 
     try {
@@ -193,6 +207,7 @@ export {
     recuperarPassoword,
     comprobarToken,
     getUsuarios,
+    perfilUsuario,
     nuevoPassword,
     postUsuario,
     editUsuario,
