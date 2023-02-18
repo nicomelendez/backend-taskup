@@ -28,7 +28,7 @@ const login = async (req, res) => {
             })
         }
 
-        const {respuesta, usuario} = await loginUsuario(email, password)
+        const {respuesta, usuario, token} = await loginUsuario(email, password)
 
         if(respuesta.status === 'error' || usuario === null){
             return res.status(500).json({
@@ -39,7 +39,8 @@ const login = async (req, res) => {
 
         return res.status(200).json({
             respuesta,
-            usuario
+            usuario,
+            token
         })
 
     } catch (error) {

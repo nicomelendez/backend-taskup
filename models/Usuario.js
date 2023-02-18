@@ -43,7 +43,8 @@ usuarioSchema.methods.comprobarPassword = async function(password){
 }
 
 usuarioSchema.methods.datosNoSensibles = function(){
-    const usuario =  {
+    const usuario = {
+        id: this._id,
         nombre: this.nombre,
         email: this.email
     }

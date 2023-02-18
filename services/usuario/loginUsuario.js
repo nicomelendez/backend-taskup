@@ -1,3 +1,4 @@
+import generarToken from '../../helpers/token/generarToken.js'
 import Usuario from '../../models/Usuario.js'
 
 const loginUsuario = async (email, password) => {
@@ -45,7 +46,8 @@ const loginUsuario = async (email, password) => {
 
         return {
             respuesta: respuestaBien,
-            usuario: existeUsuario.datosNoSensibles()
+            usuario: existeUsuario.datosNoSensibles(),
+            token: generarToken(existeUsuario.nombre, existeUsuario.email)
         }
         
 
