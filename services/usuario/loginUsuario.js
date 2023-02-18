@@ -20,7 +20,7 @@ const loginUsuario = async (email, password) => {
 
     try {
         
-        const existeUsuario = await Usuario.findOne({email: email})
+        const existeUsuario = await Usuario.findOne({email})
         
         if(!existeUsuario){
             return {
