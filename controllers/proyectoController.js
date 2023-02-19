@@ -3,6 +3,7 @@ import editarProyecto from '../services/proyectos/editarProyecto.js'
 import eliminarProyecto from '../services/proyectos/eliminarProyecto.js'
 import listarProyectos from '../services/proyectos/listarProyectos.js'
 import obtenerUnProyecto from '../services/proyectos/obtenerUnProyecto.js'
+import listarTareas from '../services/tareas/listarTareas.js'
 
 const respuestaErrorCatch = {
     status: 'error',
@@ -51,8 +52,9 @@ const getOneProyecto = async(req, res)=>{
         }
 
         const {respuesta, proyecto} = await obtenerUnProyecto(id, idUsuario)
+        const { listaDeTareas, contador } = await listarTareas(id, idUsuario)
 
-        if(respuesta.status === 'error' || proyecto === null){
+        if(respuesta.status === 'error' || proyecto === null || listaDeTareas === null){
             return res.status(500).json({
                 respuesta,
                 proyecto
@@ -61,7 +63,9 @@ const getOneProyecto = async(req, res)=>{
 
         return res.status(200).json({
             respuesta,
-            proyecto
+            proyecto,
+            listaDeTareas,
+            contador
         })
     } catch (error) {
         return res.status(500).json(respuestaErrorCatch)
@@ -105,14 +109,6 @@ const addColaborador = async(req, res)=>{
 }
 
 const deleteColaborador= async(req, res)=>{
-    try {
-        
-    } catch (error) {
-        return res.status(500).json(respuestaErrorCatch)
-    }
-}
-
-const getTareas = async(req, res)=>{
     try {
         
     } catch (error) {
@@ -183,6 +179,5 @@ export {
     getOneProyecto,
     deleteColaborador,
     editProyecto,
-    deleteProyecto,
-    getTareas
+    deleteProyecto
 }
