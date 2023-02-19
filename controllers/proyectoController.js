@@ -1,4 +1,6 @@
 import crearProyecto from '../services/proyectos/crearProyecto.js'
+import editarProyecto from '../services/proyectos/editarProyecto.js'
+import eliminarProyecto from '../services/proyectos/eliminarProyecto.js'
 import listarProyectos from '../services/proyectos/listarProyectos.js'
 import obtenerUnProyecto from '../services/proyectos/obtenerUnProyecto.js'
 
@@ -43,7 +45,7 @@ const getOneProyecto = async(req, res)=>{
     try {
         const {id} = req.params
         const idUsuario = req.usuario.id
-        
+
         if(!id){
             return res.status(500).json(respuestaFaltanDatos)
         }
@@ -120,7 +122,28 @@ const getTareas = async(req, res)=>{
 
 const editProyectos = async(req, res)=>{
     try {
-        
+        const {id} = req.params
+        const oProyecto = req.body;
+        const creador = req.usuario.id
+
+        if(!oProyecto.nombre || !oProyecto.descripcion || !oProyecto.cliente){
+            return res.status(500).json(respuestaFaltanDatos)
+        }
+
+        const {respuesta, proyecto} = await editarProyecto(id, oProyecto, creador)
+
+        if(respuesta.status === 'error' || proyecto === null){
+            return res.status(500).json({
+                respuesta,
+                proyecto
+            })
+        }
+
+        return res.status(200).json({
+            respuesta,
+            proyecto
+        })
+
     } catch (error) {
         return res.status(500).json(respuestaErrorCatch)
     }
@@ -128,7 +151,26 @@ const editProyectos = async(req, res)=>{
 
 const deleteProyectos = async(req, res)=>{
     try {
-        
+        const {id} = req.params
+        const creador = req.usuario.id
+
+        if(!id){
+            return res.status(500).json(respuestaFaltanDatos)
+        }
+
+        const {respuesta, proyecto} = await eliminarProyecto(id, creador)
+
+        if(respuesta.status === 'error' || proyecto === null){
+            return res.status(500).json({
+                respuesta,
+                proyecto
+            })
+        }
+
+        return res.status(200).json({
+            respuesta,
+            proyecto
+        })
     } catch (error) {
         return res.status(500).json(respuestaErrorCatch)
     }
