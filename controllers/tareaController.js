@@ -1,8 +1,7 @@
-import crearProyecto from '../services/proyectos/crearProyecto.js'
-import editarProyecto from '../services/proyectos/editarProyecto.js'
-import eliminarProyecto from '../services/proyectos/eliminarProyecto.js'
-import listarProyectos from '../services/proyectos/listarProyectos.js'
-import obtenerUnProyecto from '../services/proyectos/obtenerUnProyecto.js'
+import crearTarea from '../services/tareas/crearTarea.js'
+import editarTarea from '../services/tareas/editarTarea.js'
+import eliminarTarea from '../services/tareas/eliminarTarea.js'
+import obtenerUnaTarea from '../services/tareas/obtenerUnaTarea.js'
 
 const respuestaErrorCatch = {
     status: 'error',
@@ -13,62 +12,62 @@ const respuestaFaltanDatos = {
     message:'Faltan datos'
 }
 
-const getProyectos = async(req, res)=>{
-    try {
-        const creador = req.usuario
-
-        if(!creador){
-            return res.status(500).json(respuestaFaltanDatos)
-        }
-
-        const {respuesta, listaDeProyectos, contador} = await listarProyectos(creador)
-
-        if(respuesta.status === 'error' || listaDeProyectos === null){
-            return res.status(500).json({
-                respuesta,
-                listaDeProyectos
-            })
-        }
-
-        return res.status(200).json({
-            respuesta,
-            contador,
-            listaDeProyectos
-        })
-        
-    } catch (error) {
-        return res.status(500).json(respuestaErrorCatch)
-    }
-}
-
-const getOneProyecto = async(req, res)=>{
+const getOneTarea = async(req, res)=>{
     try {
         const {id} = req.params
         const idUsuario = req.usuario.id
 
-        if(!id){
+        if(!id || !idUsuario){
             return res.status(500).json(respuestaFaltanDatos)
         }
 
-        const {respuesta, proyecto} = await obtenerUnProyecto(id, idUsuario)
+        const {respuesta, tarea} = await obtenerUnaTarea(id, idUsuario)
 
-        if(respuesta.status === 'error' || proyecto === null){
+        if(respuesta.status === 'error' || tarea === null){
             return res.status(500).json({
                 respuesta,
-                proyecto
+                tarea
             })
         }
 
         return res.status(200).json({
             respuesta,
-            proyecto
+            tarea
         })
     } catch (error) {
         return res.status(500).json(respuestaErrorCatch)
     }
 }
 
-const addProyecto = async(req, res)=>{
+const addTarea = async(req, res)=>{
+    try {
+        const oTarea = req.body;
+        const idUsuario = req.usuario.id
+        
+        if(!oTarea.nombre || !oTarea.descripcion || !oTarea.prioridad || !oTarea.proyecto){
+            return res.status(500).json(respuestaFaltanDatos)
+        }
+
+        const {respuesta, tarea} = await crearTarea(oTarea, idUsuario)
+
+        if(respuesta.status === 'error' || tarea === null){
+            return res.status(500).json({
+                respuesta,
+                tarea
+            })
+        }
+
+        return res.status(200).json({
+            respuesta,
+            tarea
+        })
+
+    } catch (error) {
+        return res.status(500).json(respuestaErrorCatch)
+    }
+}
+
+const cambiarEstadoTarea = async(req, res)=>{
     try {
         const oProyecto = req.body;
         const creador = req.usuario.id
@@ -96,80 +95,55 @@ const addProyecto = async(req, res)=>{
     }
 }
 
-const addColaborador = async(req, res)=>{
+const editTarea = async(req, res)=>{
     try {
-        
-    } catch (error) {
-        return res.status(500).json(respuestaErrorCatch)
-    }
-}
-
-const deleteColaborador= async(req, res)=>{
-    try {
-        
-    } catch (error) {
-        return res.status(500).json(respuestaErrorCatch)
-    }
-}
-
-const getTareas = async(req, res)=>{
-    try {
-        
-    } catch (error) {
-        return res.status(500).json(respuestaErrorCatch)
-    }
-}
-
-const editProyecto = async(req, res)=>{
-    try {
-        const {id} = req.params
-        const oProyecto = req.body;
+        const { id } = req.params
+        const oTarea = req.body;
         const creador = req.usuario.id
 
-        if(!oProyecto.nombre || !oProyecto.descripcion || !oProyecto.cliente){
+        if(!oTarea.nombre || !oTarea.descripcion || !oTarea.prioridad || !oTarea.proyecto){
             return res.status(500).json(respuestaFaltanDatos)
         }
 
-        const {respuesta, proyecto} = await editarProyecto(id, oProyecto, creador)
+        const {respuesta, tarea} = await editarTarea(id, oTarea, creador)
 
-        if(respuesta.status === 'error' || proyecto === null){
+        if(respuesta.status === 'error' || tarea === null){
             return res.status(500).json({
                 respuesta,
-                proyecto
+                tarea
             })
         }
 
         return res.status(200).json({
             respuesta,
-            proyecto
+            tarea
         })
-
     } catch (error) {
         return res.status(500).json(respuestaErrorCatch)
     }
 }
 
-const deleteProyecto = async(req, res)=>{
+const deleteTarea = async(req, res)=>{
     try {
-        const {id} = req.params
+        const { id } = req.params
         const creador = req.usuario.id
 
-        if(!id){
+        if(!id || !creador){
             return res.status(500).json(respuestaFaltanDatos)
         }
 
-        const {respuesta, proyecto} = await eliminarProyecto(id, creador)
+        const {respuesta, tarea} = await eliminarTarea(id, creador)
 
-        if(respuesta.status === 'error' || proyecto === null){
+        if(respuesta.status === 'error' || tarea === null){
             return res.status(500).json({
                 respuesta,
-                proyecto
+                tarea
             })
         }
 
         return res.status(200).json({
             respuesta,
-            proyecto
+            tarea
         })
     } catch (error) {
         return res.status(500).json(respuestaErrorCatch)
@@ -177,12 +151,9 @@ const deleteProyecto = async(req, res)=>{
 }
 
 export {
-    getProyectos,
-    addProyecto,
-    addColaborador,
-    getOneProyecto,
-    deleteColaborador,
-    editProyecto,
-    deleteProyecto,
-    getTareas
+    addTarea,
+    getOneTarea,
+    editTarea,
+    cambiarEstadoTarea,
+    deleteTarea
 }

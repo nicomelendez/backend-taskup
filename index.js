@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import connectionDB from './config/database.js'
 import usuarioRoutes from './routes/usuarioRoutes.js'
 import proyectoRoutes from './routes/proyectoRoutes.js'
+import tareaRoutes from './routes/tareaRoutes.js'
 
 const app = express()
 app.use(express.json())
@@ -14,6 +15,7 @@ connectionDB()
 // Routing
 app.use('/api', usuarioRoutes)
 app.use('/api', proyectoRoutes)
+app.use('/api', tareaRoutes)
 
 const PORT = process.env.PORT || 4000
 
