@@ -5,7 +5,7 @@ import generarId from '../../helpers/token/generarId.js';
 const crearUsuario = async (nombre, password, email) =>{
     const respuestaBien = {
         status: 'success',
-        message: 'Usuario creado'
+        message: 'Usuario creado correctamente, revisa tu email para confirmar tu cuenta'
     }
     const respuestaMal = {
         status: 'error',
@@ -13,7 +13,7 @@ const crearUsuario = async (nombre, password, email) =>{
     }
     const respuestaExiste = {
         status: 'error',
-        message: 'Ya existe el usuario'
+        message: 'Ya existe un usuario con ese correo electronico'
     }
     try {
         

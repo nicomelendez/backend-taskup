@@ -167,16 +167,13 @@ const postUsuario = async (req, res) => {
         const {respuesta, usuario} = await crearUsuario(nombre, password, email)
 
         if(respuesta.status === 'error' || usuario === null){
-            return res.status(500).json({
+            return res.status(400).json({
                 respuesta,
                 usuario
             })
         }
 
-        return res.status(200).json({
-            respuesta,
-            usuario
-        })
+        return res.status(200).json(respuesta)
 
     } catch (error) {
         return res.status(500).json(respuestaCathError)
