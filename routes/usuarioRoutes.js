@@ -7,7 +7,7 @@ const router = express.Router()
 router.post('/usuarios/login', login)
 router.post('/usuarios', postUsuario)
 router.get('/usuarios/confirmar/:token', confirmarCuenta)
-router.post('usuarios/olvide-password', recuperarPassoword)
+router.post('/usuarios/olvide-password', recuperarPassoword)
 router.get('/usuarios/olvide-password/:token', comprobarToken)
 router.route('/usuarios/olvide-password/:token').get(comprobarToken).post(nuevoPassword)
 

@@ -1,3 +1,4 @@
+import { emailOlvidePassword } from '../../helpers/email/email.js'
 import generarId from '../../helpers/token/generarId.js'
 import Usuario from '../../models/Usuario.js'
 
@@ -23,6 +24,7 @@ const usuarioOlvidoPassword = async (email) => {
 
         existeUsuario.token = generarId();
         await existeUsuario.save();
+        await emailOlvidePassword(existeUsuario)
 
         return {
             respuesta: respuestaBien
