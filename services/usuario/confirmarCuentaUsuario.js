@@ -8,7 +8,7 @@ const confirmarCuentaUsuario = async (token) =>{
     }
     const respuestaMal = {
         status: 'error',
-        message: 'Error al confirmar tu cuenta'
+        message: 'Token no valido'
     }
 
     try {

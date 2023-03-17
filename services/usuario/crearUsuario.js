@@ -1,6 +1,7 @@
 import Usuario from '../../models/Usuario.js'
 import comprobarUsuarioExiste from '../../helpers/usuario/comprobarUsuarioExiste.js';
 import generarId from '../../helpers/token/generarId.js';
+import { emailRegistro } from '../../helpers/email/email.js';
 
 const crearUsuario = async (nombre, password, email) =>{
     const respuestaBien = {
@@ -30,6 +31,8 @@ const crearUsuario = async (nombre, password, email) =>{
         nuevoUsuario.token = generarId()
         
         const usuarioAlmacenado = await nuevoUsuario.save();
+
+        await emailRegistro(usuarioAlmacenado);
 
         if(!usuarioAlmacenado){
             return {
