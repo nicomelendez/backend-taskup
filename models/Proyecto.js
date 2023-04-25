@@ -1,38 +1,41 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
 
-const proyectoSchema = mongoose.Schema({
+const proyectoSchema = mongoose.Schema(
+  {
     nombre: {
-        type:String,
-        trim: true,
-        required: true
+      type: String,
+      trim: true,
+      required: true,
     },
     descripcion: {
-        type: String,
-        trim: true,
-        required: true
+      type: String,
+      trim: true,
+      required: true,
     },
     fehcaEntrega: {
-        type: Date,
-        default: Date.now()
+      type: Date,
+      default: Date.now(),
     },
-    cliente:{
-        type:String,
-        trim: true,
-        required: true
+    cliente: {
+      type: String,
+      trim: true,
+      required: true,
     },
-    creador:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Usuario'
+    creador: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Usuario",
     },
     colaboradores: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Usuario'
-        }
-    ]
-},{
-    timestamps: true
-})
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Usuario",
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  }
+);
 
-const Proyecto = mongoose.model('Proyecto',proyectoSchema)
-export default Proyecto
+const Proyecto = mongoose.model("Proyecto", proyectoSchema);
+export default Proyecto;

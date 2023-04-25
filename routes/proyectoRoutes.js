@@ -1,13 +1,32 @@
-import express  from 'express'
-import { getProyectos, addProyecto, addColaborador, getOneProyecto, deleteColaborador, editProyecto, deleteProyecto } from '../controllers/proyectoController.js'
-import checkAuth from '../middleware/checkAuth.js'
+import express from "express";
+import {
+  getProyectos,
+  addProyecto,
+  addColaborador,
+  getOneProyecto,
+  deleteColaborador,
+  editProyecto,
+  deleteProyecto,
+} from "../controllers/proyectoController.js";
+import checkAuth from "../middleware/checkAuth.js";
 
-const router = express.Router()
+const router = express.Router();
 
-router.route('/proyectos').get(checkAuth, getProyectos).post(checkAuth, addProyecto)
-router.route('/proyectos/:id').get(checkAuth, getOneProyecto).put(checkAuth, editProyecto).delete(checkAuth, deleteProyecto)
+router
+  .route("/proyectos")
+  .get(checkAuth, getProyectos)
+  .post(checkAuth, addProyecto);
+router
+  .route("/proyectos/:id")
+  .get(checkAuth, getOneProyecto)
+  .put(checkAuth, editProyecto)
+  .delete(checkAuth, deleteProyecto);
 
-router.post('/proyectos/agregar-colaborador/:id', checkAuth, addColaborador)
-router.delete('/proyectos/agregar-colaborador/:id', checkAuth, deleteColaborador)
+router.post("/proyectos/agregar-colaborador/:id", checkAuth, addColaborador);
+router.delete(
+  "/proyectos/agregar-colaborador/:id",
+  checkAuth,
+  deleteColaborador
+);
 
-export default router
+export default router;

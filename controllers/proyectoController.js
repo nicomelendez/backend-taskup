@@ -1,183 +1,188 @@
-import crearProyecto from '../services/proyectos/crearProyecto.js'
-import editarProyecto from '../services/proyectos/editarProyecto.js'
-import eliminarProyecto from '../services/proyectos/eliminarProyecto.js'
-import listarProyectos from '../services/proyectos/listarProyectos.js'
-import obtenerUnProyecto from '../services/proyectos/obtenerUnProyecto.js'
-import listarTareas from '../services/tareas/listarTareas.js'
+import crearProyecto from "../services/proyectos/crearProyecto.js";
+import editarProyecto from "../services/proyectos/editarProyecto.js";
+import eliminarProyecto from "../services/proyectos/eliminarProyecto.js";
+import listarProyectos from "../services/proyectos/listarProyectos.js";
+import obtenerUnProyecto from "../services/proyectos/obtenerUnProyecto.js";
+import listarTareas from "../services/tareas/listarTareas.js";
 
 const respuestaErrorCatch = {
-    status: 'error',
-    message: 'Erro en la bd'
-}
+  status: "error",
+  message: "Erro en la bd",
+};
 const respuestaFaltanDatos = {
-    status: 'error',
-    message:'Faltan datos'
-}
+  status: "error",
+  message: "Faltan datos",
+};
 
-const getProyectos = async(req, res)=>{
-    try {
-        const creador = req.usuario
+const getProyectos = async (req, res) => {
+  try {
+    const creador = req.usuario;
 
-        if(!creador){
-            return res.status(500).json(respuestaFaltanDatos)
-        }
-
-        const {respuesta, listaDeProyectos, contador} = await listarProyectos(creador)
-
-        if(respuesta.status === 'error' || listaDeProyectos === null){
-            return res.status(500).json({
-                respuesta,
-                listaDeProyectos
-            })
-        }
-
-        return res.status(200).json({
-            respuesta,
-            contador,
-            listaDeProyectos
-        })
-        
-    } catch (error) {
-        return res.status(500).json(respuestaErrorCatch)
+    if (!creador) {
+      return res.status(500).json(respuestaFaltanDatos);
     }
-}
 
-const getOneProyecto = async(req, res)=>{
-    try {
-        const {id} = req.params
-        const idUsuario = req.usuario.id
+    const { respuesta, listaDeProyectos, contador } = await listarProyectos(
+      creador
+    );
 
-        if(!id){
-            return res.status(500).json(respuestaFaltanDatos)
-        }
-
-        const {respuesta, proyecto} = await obtenerUnProyecto(id, idUsuario)
-        const { listaDeTareas, contador } = await listarTareas(id, idUsuario)
-
-        if(respuesta.status === 'error' || proyecto === null || listaDeTareas === null){
-            return res.status(500).json({
-                respuesta,
-                proyecto
-            })
-        }
-
-        return res.status(200).json({
-            respuesta,
-            proyecto,
-            listaDeTareas,
-            contador
-        })
-    } catch (error) {
-        return res.status(500).json(respuestaErrorCatch)
+    if (respuesta.status === "error" || listaDeProyectos === null) {
+      return res.status(500).json({
+        respuesta,
+        listaDeProyectos,
+      });
     }
-}
 
-const addProyecto = async(req, res)=>{
-    try {
-        const oProyecto = req.body;
-        const creador = req.usuario.id
+    return res.status(200).json({
+      respuesta,
+      contador,
+      listaDeProyectos,
+    });
+  } catch (error) {
+    return res.status(500).json(respuestaErrorCatch);
+  }
+};
 
-        if(!oProyecto.nombre || !oProyecto.descripcion || !oProyecto.cliente){
-            return res.status(500).json(respuestaFaltanDatos)
-        }
+const getOneProyecto = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const idUsuario = req.usuario.id;
 
-        const {respuesta, proyecto} = await crearProyecto(oProyecto, creador)
-
-        if(respuesta.status === 'error' || proyecto === null){
-            return res.status(500).json({
-                respuesta,
-                proyecto
-            })
-        }
-
-        return res.status(200).json({
-            respuesta,
-            proyecto
-        })
-
-    } catch (error) {
-        return res.status(500).json(respuestaErrorCatch)
+    if (!id) {
+      return res.status(500).json(respuestaFaltanDatos);
     }
-}
 
-const addColaborador = async(req, res)=>{
-    try {
-        
-    } catch (error) {
-        return res.status(500).json(respuestaErrorCatch)
+    const { respuesta, proyecto } = await obtenerUnProyecto(id, idUsuario);
+    const { listaDeTareas, contador } = await listarTareas(id, idUsuario);
+
+    if (
+      respuesta.status === "error" ||
+      proyecto === null ||
+      listaDeTareas === null
+    ) {
+      return res.status(500).json({
+        respuesta,
+        proyecto,
+      });
     }
-}
 
-const deleteColaborador= async(req, res)=>{
-    try {
-        
-    } catch (error) {
-        return res.status(500).json(respuestaErrorCatch)
+    return res.status(200).json({
+      respuesta,
+      proyecto,
+      listaDeTareas,
+      contador,
+    });
+  } catch (error) {
+    return res.status(500).json(respuestaErrorCatch);
+  }
+};
+
+const addProyecto = async (req, res) => {
+  try {
+    const oProyecto = req.body;
+    const creador = req.usuario.id;
+
+    if (!oProyecto.nombre || !oProyecto.descripcion || !oProyecto.cliente) {
+      return res.status(500).json(respuestaFaltanDatos);
     }
-}
 
-const editProyecto = async(req, res)=>{
-    try {
-        const {id} = req.params
-        const oProyecto = req.body;
-        const creador = req.usuario.id
+    const { respuesta, proyecto } = await crearProyecto(oProyecto, creador);
 
-        if(!oProyecto.nombre || !oProyecto.descripcion || !oProyecto.cliente){
-            return res.status(500).json(respuestaFaltanDatos)
-        }
-
-        const {respuesta, proyecto} = await editarProyecto(id, oProyecto, creador)
-
-        if(respuesta.status === 'error' || proyecto === null){
-            return res.status(500).json({
-                respuesta,
-                proyecto
-            })
-        }
-
-        return res.status(200).json({
-            respuesta,
-            proyecto
-        })
-
-    } catch (error) {
-        return res.status(500).json(respuestaErrorCatch)
+    if (respuesta.status === "error" || proyecto === null) {
+      return res.status(500).json({
+        respuesta,
+        proyecto,
+      });
     }
-}
 
-const deleteProyecto = async(req, res)=>{
-    try {
-        const {id} = req.params
-        const creador = req.usuario.id
+    return res.status(200).json({
+      respuesta,
+      proyecto,
+    });
+  } catch (error) {
+    return res.status(500).json(respuestaErrorCatch);
+  }
+};
 
-        if(!id){
-            return res.status(500).json(respuestaFaltanDatos)
-        }
+const addColaborador = async (req, res) => {
+  try {
+  } catch (error) {
+    return res.status(500).json(respuestaErrorCatch);
+  }
+};
 
-        const {respuesta, proyecto} = await eliminarProyecto(id, creador)
+const deleteColaborador = async (req, res) => {
+  try {
+  } catch (error) {
+    return res.status(500).json(respuestaErrorCatch);
+  }
+};
 
-        if(respuesta.status === 'error' || proyecto === null){
-            return res.status(500).json({
-                respuesta,
-                proyecto
-            })
-        }
+const editProyecto = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const oProyecto = req.body;
+    const creador = req.usuario.id;
 
-        return res.status(200).json({
-            respuesta,
-            proyecto
-        })
-    } catch (error) {
-        return res.status(500).json(respuestaErrorCatch)
+    if (!oProyecto.nombre || !oProyecto.descripcion || !oProyecto.cliente) {
+      return res.status(500).json(respuestaFaltanDatos);
     }
-}
+
+    const { respuesta, proyecto } = await editarProyecto(
+      id,
+      oProyecto,
+      creador
+    );
+
+    if (respuesta.status === "error" || proyecto === null) {
+      return res.status(500).json({
+        respuesta,
+        proyecto,
+      });
+    }
+
+    return res.status(200).json({
+      respuesta,
+      proyecto,
+    });
+  } catch (error) {
+    return res.status(500).json(respuestaErrorCatch);
+  }
+};
+
+const deleteProyecto = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const creador = req.usuario.id;
+
+    if (!id) {
+      return res.status(500).json(respuestaFaltanDatos);
+    }
+
+    const { respuesta, proyecto } = await eliminarProyecto(id, creador);
+
+    if (respuesta.status === "error" || proyecto === null) {
+      return res.status(500).json({
+        respuesta,
+        proyecto,
+      });
+    }
+
+    return res.status(200).json({
+      respuesta,
+      proyecto,
+    });
+  } catch (error) {
+    return res.status(500).json(respuestaErrorCatch);
+  }
+};
 
 export {
-    getProyectos,
-    addProyecto,
-    addColaborador,
-    getOneProyecto,
-    deleteColaborador,
-    editProyecto,
-    deleteProyecto
-}
+  getProyectos,
+  addProyecto,
+  addColaborador,
+  getOneProyecto,
+  deleteColaborador,
+  editProyecto,
+  deleteProyecto,
+};
